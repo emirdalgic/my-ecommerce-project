@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController implements IUserController {
 
@@ -38,7 +38,7 @@ public class UserController implements IUserController {
     @Override
     public ResponseEntity<Void> deleteUserById(@PathVariable(name = "id") Long id) {
         userService.deleteUserById(id);
-        ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = "/{id}")

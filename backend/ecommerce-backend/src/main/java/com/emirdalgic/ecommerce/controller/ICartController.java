@@ -1,0 +1,9 @@
+package com.emirdalgic.ecommerce.controller;
+
+import com.emirdalgic.ecommerce.dto.DtoAddToCartIU;
+import com.emirdalgic.ecommerce.dto.DtoCart;
+import org.springframework.http.ResponseEntity;
+
+public interface ICartController {
+    public ResponseEntity<DtoCart> addToCart(Long userId, DtoAddToCartIU dtoAddToCartIU);
+}

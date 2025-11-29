@@ -14,4 +14,5 @@ public interface IProductService {
     public void deleteProductById(Long id);
     public DtoProduct createProduct(DtoProductIU dtoProductIU);
     public DtoProduct updateProductById(Long id, DtoProductIU dtoProductIU);
+    public Page<DtoProduct> searchProducts(String query, int page, int size);
 }

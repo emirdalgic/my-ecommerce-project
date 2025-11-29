@@ -15,4 +15,5 @@ public interface IProductController {
     public ResponseEntity<Void> deleteProductById(Long id);
     public ResponseEntity<DtoProduct> createProduct(DtoProductIU dtoProductIU);
     public ResponseEntity<DtoProduct> updateProductById(Long id, DtoProductIU dtoProductIU);
+    public ResponseEntity<Page<DtoProduct>> searchProducts(String query, int page, int size);
 }

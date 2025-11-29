@@ -14,6 +14,7 @@ import com.emirdalgic.ecommerce.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -150,5 +151,18 @@ public class ProductService implements IProductService {
         return mapToDto(updatedProduct);
     }
 
+    @Override
+    public Page<DtoProduct> searchProducts(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findByNameContainingIgnoreCase(query, pageable);
+
+        List<DtoProduct> dtoProducts = new ArrayList<>();
+        for(Product product : productPage.getContent()){
+            DtoProduct dtoProduct = new DtoProduct();
+            dtoProduct = mapToDto(product);
+            dtoProducts.add(dtoProduct);
+        }
+        return new PageImpl<>(dtoProducts, pageable, productPage.getTotalElements());
+    }
 
 }

@@ -8,6 +8,8 @@ import com.emirdalgic.ecommerce.entities.Product;
 import com.emirdalgic.ecommerce.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +64,14 @@ public class ProductController implements IProductController {
                                                         @RequestBody DtoProductIU dtoProductIU) {
         DtoProduct updatedProduct = productService.updateProductById(id, dtoProductIU);
         return ResponseEntity.ok(updatedProduct); //burada nasıl bir status kod gönderceğimi bilemedim o yüzden ok gönderdim
+    }
+
+    @GetMapping(path = "/search")
+    @Override
+    public ResponseEntity<Page<DtoProduct>> searchProducts(@RequestParam String query,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(productService.searchProducts(query,page,size));
     }
 }

@@ -15,5 +15,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //for showcase
     List<Product> findTop5ByCategoryIdOrderByIdDesc(Long categoryId);
     //for searchbar
-    Page<Product> findNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

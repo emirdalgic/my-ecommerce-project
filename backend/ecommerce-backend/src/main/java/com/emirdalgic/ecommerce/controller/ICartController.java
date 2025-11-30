@@ -5,5 +5,6 @@ import com.emirdalgic.ecommerce.dto.DtoCart;
 import org.springframework.http.ResponseEntity;
 
 public interface ICartController {
-    public ResponseEntity<DtoCart> addToCart(Long userId, DtoAddToCartIU dtoAddToCartIU);
+    public ResponseEntity<DtoCart> addToCart(DtoAddToCartIU dtoAddToCartIU);
+    public ResponseEntity<Void> deleteCartItem(Long productId);
 }

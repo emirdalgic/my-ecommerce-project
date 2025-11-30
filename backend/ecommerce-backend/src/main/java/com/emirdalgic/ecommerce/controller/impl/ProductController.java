@@ -63,7 +63,7 @@ public class ProductController implements IProductController {
     public ResponseEntity<DtoProduct> updateProductById(@PathVariable(name = "id") Long id,
                                                         @RequestBody DtoProductIU dtoProductIU) {
         DtoProduct updatedProduct = productService.updateProductById(id, dtoProductIU);
-        return ResponseEntity.ok(updatedProduct); //burada nasıl bir status kod gönderceğimi bilemedim o yüzden ok gönderdim
+        return ResponseEntity.ok(updatedProduct);
     }
 
     @GetMapping(path = "/search")

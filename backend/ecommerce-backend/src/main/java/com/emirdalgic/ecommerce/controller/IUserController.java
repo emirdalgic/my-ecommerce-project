@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IUserController {
-    public ResponseEntity<DtoUser> saveUser(DtoUserIU dtoUserIU);
     public List<DtoUser> listUser();
     public ResponseEntity<Void> deleteUserById(Long id);
     public ResponseEntity<DtoUser> getUserById(Long id);

@@ -21,13 +21,6 @@ public class UserController implements IUserController {
 
     private final IUserService userService;
 
-    @PostMapping(path = "/register")
-    @Override
-    public ResponseEntity<DtoUser> saveUser(@RequestBody @Valid DtoUserIU dtoUserIU) {
-        DtoUser savedUser = userService.saveUser(dtoUserIU);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-    }
-
     @GetMapping(path = "/list")
     @Override
     public List<DtoUser> listUser() {

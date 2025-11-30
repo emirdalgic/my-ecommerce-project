@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,9 @@ public class Order {
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @Column(name = "purchase_price")
+    private BigDecimal purchasePrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

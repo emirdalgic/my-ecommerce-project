@@ -15,11 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class CartController implements ICartController {
     private final ICartService cartService;
 
-    @PostMapping(path = "/{id}")
+    @PostMapping(path = "/add")
     @Override
-    public ResponseEntity<DtoCart> addToCart(@PathVariable(name = "userId") Long userId,
-                                            @RequestBody DtoAddToCartIU dtoAddToCartIU) {
-        long mockUserId = 1L; //i will change here after make auth mechanism
-        return ResponseEntity.ok(cartService.addToCart(mockUserId, dtoAddToCartIU));
+    public ResponseEntity<DtoCart> addToCart(@RequestBody DtoAddToCartIU dtoAddToCartIU) {
+        return ResponseEntity.ok(cartService.addToCart(dtoAddToCartIU));
+    }
+
+    @DeleteMapping(path = "/item/{productId}")
+    @Override
+    public ResponseEntity<Void> deleteCartItem(@PathVariable(name = "productId") Long productId) {
+        cartService.deleteCartItem(productId);
+        return ResponseEntity.noContent().build();
     }
 }

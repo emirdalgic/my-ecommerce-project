@@ -4,5 +4,6 @@ import com.emirdalgic.ecommerce.dto.DtoAddToCartIU;
 import com.emirdalgic.ecommerce.dto.DtoCart;
 
 public interface ICartService {
-    public DtoCart addToCart(Long userId, DtoAddToCartIU dtoAddToCartIU);
+    public DtoCart addToCart(DtoAddToCartIU dtoAddToCartIU);
+    public void deleteCartItem(Long productId);
 }

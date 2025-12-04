@@ -25,9 +25,12 @@ public class AuthService implements IAuthService {
     private final JwtService jwtService;
 
     @Override
-    public DtoUser register(DtoUserIU dtoUserIU) {
-        return userService.saveUser(dtoUserIU);
-    }
+    public DtoToken register(DtoUserIU dtoUserIU) {
+        User user = userService.saveUser(dtoUserIU);
+        String token = jwtService.generateToken(user);
+        return new DtoToken(token); // we logged in the user after registration
+    }//correct way is we could register them our db and let them login at login page after their mail verification
+    //that obstructs to fake mail registrations and most important fake identity registrations
 
     @Override
     public DtoToken login(DtoLoginIU dtoLoginIU) {

@@ -26,7 +26,7 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public DtoUser saveUser(DtoUserIU dtoUserIU) {
+    public User saveUser(DtoUserIU dtoUserIU) {
         User user = new User();
         BeanUtils.copyProperties(dtoUserIU, user);
 
@@ -36,10 +36,8 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new BaseException(MessageType.NO_RECORD_EXIST));
 
         user.setRoles(List.of(customerRole));
-        User dbUser = userRepository.save(user);
-        DtoUser dtoUser = new DtoUser();
-        BeanUtils.copyProperties(dbUser, dtoUser);
-        return dtoUser;
+
+        return userRepository.save(user);
     }
 
     //for debugs

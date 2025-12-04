@@ -37,7 +37,7 @@ public class ProductController implements IProductController {
         return productService.getShowCaseProducts();
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/list/{id}")
     @Override
     public ResponseEntity<DtoProduct> getProductById(@PathVariable Long id) {
         DtoProduct product = productService.getProductById(id);

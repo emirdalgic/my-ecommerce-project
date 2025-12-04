@@ -6,6 +6,6 @@ import com.emirdalgic.ecommerce.dto.DtoUser;
 import com.emirdalgic.ecommerce.dto.DtoUserIU;
 
 public interface IAuthService {
-    public DtoUser register(DtoUserIU dtoUserIU);
+    public DtoToken register(DtoUserIU dtoUserIU);
     public DtoToken login(DtoLoginIU dtoLoginIU);
 }

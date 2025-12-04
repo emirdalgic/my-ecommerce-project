@@ -23,7 +23,7 @@ public class AuthController implements IAuthController {
 
     @PostMapping("/register")
     @Override
-    public ResponseEntity<DtoUser> register(@RequestBody @Valid DtoUserIU dtoUserIU) {
+    public ResponseEntity<DtoToken> register(@RequestBody @Valid DtoUserIU dtoUserIU) {
         return ResponseEntity.ok(authService.register(dtoUserIU));
     }
 

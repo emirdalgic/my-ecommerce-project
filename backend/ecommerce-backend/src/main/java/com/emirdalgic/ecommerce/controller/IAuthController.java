@@ -7,6 +7,6 @@ import com.emirdalgic.ecommerce.dto.DtoUserIU;
 import org.springframework.http.ResponseEntity;
 
 public interface IAuthController {
-    public ResponseEntity<DtoUser> register(DtoUserIU dtoUserIU);
+    public ResponseEntity<DtoToken> register(DtoUserIU dtoUserIU);
     public ResponseEntity<DtoToken> login(DtoLoginIU dtoLoginIU);
 }

@@ -34,3 +34,29 @@ export const searchProducts= async(query, page = 0, size = 10)=>{
     })
     return res.data
 }
+
+export const listAllProducts= async(page = 0, size = 10, sortBy = "id", sortDir = "asc")=>{
+    const res = await axiosInstance.get(`/products/list`,{
+        params: {page, size}
+    })
+    return res.data
+}
+
+
+export const getFilteredProducts = async (page = 0, size = 10, query, categoryIds, minPrice, maxPrice) => {
+  const finalMinPrice = minPrice === "" ? null : minPrice
+  const finalMaxPrice = maxPrice === "" ? null : maxPrice
+
+  const res = await axiosInstance.get(`products/filtered`, {
+    params: {
+      page,
+      size,
+      query,
+      categoryIds,
+      minPrice: finalMinPrice,
+      maxPrice: finalMaxPrice,
+    }
+  })
+
+  return res.data
+}

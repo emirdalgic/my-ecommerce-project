@@ -22,9 +22,9 @@ function ProductCard({ product }) {
         </div>
         
         <div className='flex justify-between items-center mt-2 border-t pt-3'>
-            <span className='text-blue-600 font-bold text-lg'>{product.price} TL</span>
+            <span className='text-blue-600 font-bold text-lg'>{product.price} $</span>
             <button className='bg-orange-500 text-white px-3 py-1.5 rounded-md hover:bg-orange-600 transition text-sm font-medium shadow-sm'>
-                Ekle +
+                Add to Card +
             </button>
         </div>
       </div>

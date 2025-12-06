@@ -10,8 +10,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchShowcase = async () => {
       try {
-        const data = await getProductsShowcase()
-        setCategoryNodes(data)
+        const response = await getProductsShowcase()
+        setCategoryNodes(response)
+        console.log(response);
+        
       } catch (error) {
         console.log(error)
       } finally {
@@ -32,21 +34,30 @@ const HomePage = () => {
           to="/products" 
           className="text-blue-600 font-semibold hover:text-blue-800 transition"
         >
-          See All →
+          See All Products →
         </Link>
       </div>
-      {categoryNodes.map((node, nodeIndex) => (
+      {categoryNodes.map((node) => (
         <div key={node.categoryId} className="mb-12">
-          <h3 className="text-xl font-bold mb-4 text-gray-700 pl-2 border-l-4 border-blue-500">
-            <Link to={`/products/category/${node.categoryId}`}>
-            {node.categoryName}
+          <div className="flex justify-between items-center mb-4 pl-2 border-l-4 border-blue-500">
+            <h3 className="text-xl font-bold text-gray-700">
+              <Link to={`/products/category/${node.categoryId}`} className="hover:text-blue-600 transition">
+                {node.categoryName}
+              </Link>
+            </h3>
+            <Link 
+              to={`/products/category/${node.categoryId}`}
+              className="text-sm font-medium text-blue-500 hover:text-blue-700 hover:underline transition flex items-center gap-1"
+            >
+              See More <span className="text-xs">❯</span>
             </Link>
-          </h3>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {node.products.map((product, productIndex) => (
+            {node.products.map((product) => (
               <Link 
-                key={`${product.id}-${node.categoryId}-${productIndex}`}
+                key={product.id}
                 to={`/products/${product.id}`} 
+                className="group"
               >
                 <ProductCard product={product} /> 
               </Link>
@@ -54,7 +65,6 @@ const HomePage = () => {
           </div>
         </div>
       ))}
-      
     </div>
   )
 }

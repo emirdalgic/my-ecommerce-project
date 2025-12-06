@@ -7,37 +7,37 @@ import NotFoundPage from './NotFoundPage'
 const ProductDetailPage = () => {
   const { productId } = useParams()
 
-  const { isLoggedIn, status} = useSelector(((state) => state.auth)) //auth durumunu cartservisi yazınca dönücem
+  const { isLoggedIn, status } = useSelector(((state) => state.auth)) //auth durumunu cartservisi yazınca dönücem
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [quantity ,setQuantity] = useState(1)
-  
-  useEffect(()=>{
-    const fetchProducts = async()=>{
-      try{
+  const [quantity, setQuantity] = useState(1)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
         const data = await getProductById(productId)
         setProduct(data)
         setLoading(false)
         console.log(data)
-        
-      }catch(error){
+
+      } catch (error) {
         console.log(error)
-        
+
       }
     }
     fetchProducts()
-  },[productId])
+  }, [productId])
   if (loading) return <div className='text-center py-20'>Loading...</div>
-  if (!product) return <NotFoundPage/>
+  if (!product) return <NotFoundPage />
 
 
-  return(
+  return (
     <div className="container mx-auto py-10 px-4">
       <div className="flex flex-col md:flex-row gap-10 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 rounded-lg p-4">
-          <img 
-            alt="Product Name" 
+          <img
+            alt="Product Name"
             className="max-h-[500px] w-auto object-contain hover:scale-105 transition duration-500"
           />
         </div>
@@ -65,23 +65,23 @@ const ProductDetailPage = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-auto pt-6">
-            
+
             <div className="flex items-center border rounded-lg">
-                <button onClick={()=> setQuantity(prev => Math.max(1, prev - 1))} className="px-4 py-2 hover:bg-gray-100">-</button>
-                <span className="px-4 font-semibold">{quantity}</span>
-                <button onClick={()=> setQuantity(prev => Math.min(product.stockAmount, prev + 1))} className="px-4 py-2 hover:bg-gray-100">+</button>
+              <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="px-4 py-2 hover:bg-gray-100">-</button>
+              <span className="px-4 font-semibold">{quantity}</span>
+              <button onClick={() => setQuantity(prev => Math.min(product.stockAmount, prev + 1))} className="px-4 py-2 hover:bg-gray-100">+</button>
             </div>
 
-            <button 
+            <button
               className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition shadow-md flex justify-center items-center gap-2"
-              // onClick={handleAddToCart}
+            // onClick={handleAddToCart}
             >
               🛒 Add to Card
             </button>
 
-            <button 
+            <button
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-md"
-              // onClick={handleBuyNow}
+            // onClick={handleBuyNow}
             >
               Buy now
             </button>
@@ -89,9 +89,9 @@ const ProductDetailPage = () => {
 
           <div className="text-xs text-gray-400 flex gap-4 mt-2">
             {
-              product.stockAmount > 0? <span>✓ In Stock {product.stockAmount} </span> : <span>x Out of Stock</span> 
+              product.stockAmount > 0 ? <span>✓ In Stock {product.stockAmount} </span> : <span>x Out of Stock</span>
             }
-            
+
             <span>✓ Free Delivery</span>
           </div>
 

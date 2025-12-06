@@ -13,10 +13,7 @@ import com.emirdalgic.ecommerce.repository.UserRepository;
 import com.emirdalgic.ecommerce.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,7 +72,7 @@ public class ProductService implements IProductService {
             dtoCategoryNode.setCategoryName(c.getName());
             dtoCategoryNode.setCategoryId(c.getId());
 
-            List<Product> products = productRepository.findTop5ByCategoryIdOrderByIdDesc(c.getId());
+            List<Product> products = productRepository.findTop12ByCategoryIdOrderByIdDesc(c.getId());
             List<DtoProduct> dtoProducts = new ArrayList<>();
             for(Product product : products){
                 DtoProduct dtoProduct = mapToDto(product);
@@ -163,6 +160,27 @@ public class ProductService implements IProductService {
             dtoProducts.add(dtoProduct);
         }
         return new PageImpl<>(dtoProducts, pageable, productPage.getTotalElements());
+    }
+
+    @Override
+    public Page<DtoProduct> listAllProducts(int page, int size, String sortBy,String sortDir) {
+        Sort.Direction direction;
+        if(sortDir.equalsIgnoreCase("asc")){
+            direction = Sort.Direction.ASC;
+        }else{
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = PageRequest.of(page,size, Sort.by(direction, sortBy));
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(this::mapToDto);
+    }
+
+    @Override
+    public Page<DtoProduct> getFilteredProducts(String query, List<Long> categoryIds, Double minPrice, Double maxPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findFilteredProducts(query, categoryIds, minPrice, maxPrice, pageable);
+
+        return productPage.map(this::mapToDto);
     }
 
 }

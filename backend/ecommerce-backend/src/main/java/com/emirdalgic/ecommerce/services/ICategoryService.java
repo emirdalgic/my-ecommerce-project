@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ICategoryService {
     public List<DtoCategory> listCategories();
+    public DtoCategory getCategoryById(Long id);
 }

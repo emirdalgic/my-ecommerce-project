@@ -9,10 +9,7 @@ import com.emirdalgic.ecommerce.services.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/auth")
@@ -31,5 +28,11 @@ public class AuthController implements IAuthController {
     @Override
     public ResponseEntity<DtoToken> login(@RequestBody @Valid DtoLoginIU dtoLoginIU) {
         return ResponseEntity.ok(authService.login(dtoLoginIU));
+    }
+
+    @GetMapping("/me")
+    @Override
+    public ResponseEntity<DtoUser> getCurrentUser(@RequestHeader(name = "Authorization") String token) {
+        return  ResponseEntity.ok(authService.getCurrentUser(token));
     }
 }

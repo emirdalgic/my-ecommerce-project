@@ -74,4 +74,25 @@ public class ProductController implements IProductController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(productService.searchProducts(query,page,size));
     }
+
+    @GetMapping(path = "/list")
+    @Override
+    public ResponseEntity<Page<DtoProduct>> listAllProducts(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "id")String sortBy,
+                                                            @RequestParam(defaultValue = "asc")String sortDir) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(productService.listAllProducts(page, size, sortBy,sortDir));
+    }
+
+    @GetMapping(path = "/filtered")
+    @Override
+    public ResponseEntity<Page<DtoProduct>> getFilteredProducts(@RequestParam(defaultValue = "0")int page,
+                                                                @RequestParam(defaultValue = "10")int size,
+                                                                @RequestParam(required = false)String query,
+                                                                @RequestParam(required = false)List<Long> categoryIds,
+                                                                @RequestParam(required = false)Double minPrice,
+                                                                @RequestParam(required = false)Double maxPrice) {
+        return ResponseEntity.ok(productService.getFilteredProducts(query, categoryIds, minPrice, maxPrice, page, size));
+    }
 }

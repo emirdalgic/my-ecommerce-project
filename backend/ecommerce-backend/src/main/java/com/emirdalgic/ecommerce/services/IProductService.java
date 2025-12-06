@@ -15,4 +15,6 @@ public interface IProductService {
     public DtoProduct createProduct(DtoProductIU dtoProductIU);
     public DtoProduct updateProductById(Long id, DtoProductIU dtoProductIU);
     public Page<DtoProduct> searchProducts(String query, int page, int size);
+    public Page<DtoProduct> listAllProducts(int page, int size, String sortBy,String sortDir);
+    public Page<DtoProduct> getFilteredProducts(String query, List<Long> categoryIds, Double minPrice, Double maxPrice, int page, int size);
 }

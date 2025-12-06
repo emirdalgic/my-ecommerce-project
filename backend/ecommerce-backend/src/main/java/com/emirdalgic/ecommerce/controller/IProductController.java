@@ -16,4 +16,6 @@ public interface IProductController {
     public ResponseEntity<DtoProduct> createProduct(DtoProductIU dtoProductIU);
     public ResponseEntity<DtoProduct> updateProductById(Long id, DtoProductIU dtoProductIU);
     public ResponseEntity<Page<DtoProduct>> searchProducts(String query, int page, int size);
+    public ResponseEntity<Page<DtoProduct>> listAllProducts(int page, int size, String sortBy,String sortDir);
+    public ResponseEntity<Page<DtoProduct>> getFilteredProducts(int page, int size, String query, List<Long> categoryIds, Double minPrice, Double maxPrice);
 }

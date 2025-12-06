@@ -12,8 +12,10 @@ import com.emirdalgic.ecommerce.security.JwtService;
 import com.emirdalgic.ecommerce.services.IAuthService;
 import com.emirdalgic.ecommerce.services.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,5 +52,18 @@ public class AuthService implements IAuthService {
         String token = jwtService.generateToken(user);
 
         return new DtoToken(token);
+    }
+
+    @Override
+    public DtoUser getCurrentUser(String token) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(currentUsername)
+                .orElseThrow(()-> new BaseException(MessageType.NO_RECORD_EXIST));
+
+        DtoUser dtoUser = new DtoUser();
+        BeanUtils.copyProperties(user, dtoUser);
+
+        return dtoUser;
     }
 }

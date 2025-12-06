@@ -5,7 +5,9 @@ import com.emirdalgic.ecommerce.dto.DtoCategory;
 import com.emirdalgic.ecommerce.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +23,12 @@ public class CategoryController implements ICategoryController {
     @Override
     public List<DtoCategory> listCategories() {
         return categoryService.listCategories();
+    }
+
+    @GetMapping(path = "/list/{id}")
+    @Override
+    public ResponseEntity<DtoCategory> getCategoryById(@PathVariable(name = "id") Long id) {
+        DtoCategory category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(category);
     }
 }

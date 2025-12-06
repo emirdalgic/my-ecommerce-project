@@ -2,6 +2,8 @@ package com.emirdalgic.ecommerce.services.impl;
 
 import com.emirdalgic.ecommerce.dto.DtoCategory;
 import com.emirdalgic.ecommerce.entities.Category;
+import com.emirdalgic.ecommerce.exception.BaseException;
+import com.emirdalgic.ecommerce.exception.MessageType;
 import com.emirdalgic.ecommerce.repository.CategoryRepository;
 import com.emirdalgic.ecommerce.services.ICategoryService;
 import org.springframework.beans.BeanUtils;
@@ -27,5 +29,15 @@ public class CategoryService implements ICategoryService {
             dtoCategories.add(dtoCategory);
         }
         return dtoCategories;
+    }
+
+    @Override
+    public DtoCategory getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(()-> new BaseException(MessageType.NO_RECORD_EXIST));
+        DtoCategory dtoCategory = new DtoCategory();
+
+        BeanUtils.copyProperties(category, dtoCategory);
+        return dtoCategory;
     }
 }

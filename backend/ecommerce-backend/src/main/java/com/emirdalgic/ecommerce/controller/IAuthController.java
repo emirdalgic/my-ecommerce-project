@@ -9,4 +9,5 @@ import org.springframework.http.ResponseEntity;
 public interface IAuthController {
     public ResponseEntity<DtoToken> register(DtoUserIU dtoUserIU);
     public ResponseEntity<DtoToken> login(DtoLoginIU dtoLoginIU);
+    public ResponseEntity<DtoUser> getCurrentUser(String token);
 }

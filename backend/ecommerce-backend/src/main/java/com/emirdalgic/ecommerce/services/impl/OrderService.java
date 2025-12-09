@@ -52,7 +52,7 @@ public class OrderService implements IOrderService {
 
             if(product.getCategory() != null){
                 DtoCategory dtoCategory = new DtoCategory();
-                BeanUtils.copyProperties(dtoProduct.getCategory(), dtoCategory);
+                BeanUtils.copyProperties(product.getCategory(), dtoCategory);
                 dtoProduct.setCategory(dtoCategory);
             }
 
@@ -108,21 +108,24 @@ public class OrderService implements IOrderService {
         cart.setTotalPrice(BigDecimal.ZERO);
         cartRepository.save(cart);
 
+        order.setOrderItems(orderItems);
+
         return mapToDto(order);
     }
 
     //admin paneli eklediğimde buraya geri dönücem(admin rolune göre yetki vericem).
     @Override
-    public List<DtoOrder> getUserAllOrders(Long userId) {
+    public List<DtoOrder> getAllUserOrders(Long userId) {
         return null;
     }
 
     @Override
-    public Page<DtoOrder> getUserAllOrderByPageFormat(int page, int size) {
+    public Page<DtoOrder> getUserAllOrders(int page, int size) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Pageable pageable = PageRequest.of(page,size);
         Page<Order> orderPage = orderRepository.findAllByUserEmail(username, pageable);
         return orderPage.map(this::mapToDto);
     }
+
 
 }

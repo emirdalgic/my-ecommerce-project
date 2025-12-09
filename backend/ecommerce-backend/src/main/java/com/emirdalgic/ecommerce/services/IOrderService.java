@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IOrderService {
     public DtoOrder saveOrder(Long addressId);
-    public List<DtoOrder> getUserAllOrders(Long userId);
-    public Page<DtoOrder> getUserAllOrderByPageFormat(int page, int size);
+    public List<DtoOrder> getAllUserOrders(Long userId);
+    public Page<DtoOrder> getUserAllOrders(int page, int size);
 }

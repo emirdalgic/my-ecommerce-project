@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IOrderController {
     public ResponseEntity<DtoOrder> saveOrder(Long addressId);
-    public List<DtoOrder> getUserAllOrders(Long userId);
-    public ResponseEntity<Page<DtoOrder>> getUserAllOrderByPageFormat(int page, int size);
+    public List<DtoOrder> getAllUserOrders(Long userId);
+    public ResponseEntity<Page<DtoOrder>> getUserAllOrders(int page, int size);
 
 }

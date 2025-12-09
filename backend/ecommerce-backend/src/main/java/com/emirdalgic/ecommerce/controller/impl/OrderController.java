@@ -25,14 +25,14 @@ public class OrderController implements IOrderController {
 
     @GetMapping(path = "/get/{userId}")
     @Override
-    public List<DtoOrder> getUserAllOrders(@PathVariable(name = "userId") Long userId) {
-        return orderService.getUserAllOrders(userId);
+    public List<DtoOrder> getAllUserOrders(@PathVariable(name = "userId") Long userId) {
+        return orderService.getAllUserOrders(userId);
     }
 
     @GetMapping(path = "/my-orders")
     @Override
-    public ResponseEntity<Page<DtoOrder>> getUserAllOrderByPageFormat(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<DtoOrder>> getUserAllOrders(@RequestParam(defaultValue = "0") int page,
                                                                       @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(orderService.getUserAllOrderByPageFormat(page,size));
+        return ResponseEntity.ok(orderService.getUserAllOrders(page,size));
     }
 }

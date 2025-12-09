@@ -1,12 +1,9 @@
 package com.emirdalgic.ecommerce.services;
 
-import com.emirdalgic.ecommerce.dto.DtoLoginIU;
-import com.emirdalgic.ecommerce.dto.DtoToken;
-import com.emirdalgic.ecommerce.dto.DtoUser;
-import com.emirdalgic.ecommerce.dto.DtoUserIU;
+import com.emirdalgic.ecommerce.dto.*;
 
 public interface IAuthService {
-    public DtoToken register(DtoUserIU dtoUserIU);
+    public DtoToken register(DtoRegisterUI dtoRegisterUI);
     public DtoToken login(DtoLoginIU dtoLoginIU);
     public DtoUser getCurrentUser(String token);
 }

@@ -1,9 +1,6 @@
 package com.emirdalgic.ecommerce.services.impl;
 
-import com.emirdalgic.ecommerce.dto.DtoLoginIU;
-import com.emirdalgic.ecommerce.dto.DtoToken;
-import com.emirdalgic.ecommerce.dto.DtoUser;
-import com.emirdalgic.ecommerce.dto.DtoUserIU;
+import com.emirdalgic.ecommerce.dto.*;
 import com.emirdalgic.ecommerce.entities.User;
 import com.emirdalgic.ecommerce.exception.BaseException;
 import com.emirdalgic.ecommerce.exception.MessageType;
@@ -27,8 +24,8 @@ public class AuthService implements IAuthService {
     private final JwtService jwtService;
 
     @Override
-    public DtoToken register(DtoUserIU dtoUserIU) {
-        User user = userService.saveUser(dtoUserIU);
+    public DtoToken register(DtoRegisterUI dtoRegisterUI) {
+        User user = userService.saveUser(dtoRegisterUI);
         String token = jwtService.generateToken(user);
         return new DtoToken(token); // we logged in the user after registration
     }//correct way is we could register them our db and let them login at login page after their mail verification

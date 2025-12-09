@@ -3,8 +3,10 @@ package com.emirdalgic.ecommerce.controller.impl;
 import com.emirdalgic.ecommerce.controller.IUserController;
 import com.emirdalgic.ecommerce.dto.DtoUser;
 import com.emirdalgic.ecommerce.dto.DtoUserIU;
+import com.emirdalgic.ecommerce.dto.DtoUserUpdate;
 import com.emirdalgic.ecommerce.services.IUserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,5 +41,11 @@ public class UserController implements IUserController {
     public ResponseEntity<DtoUser> getUserById(@PathVariable(name = "id") Long id) {
         DtoUser user = userService.getUserById(id);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/update-email")
+    @Override
+    public ResponseEntity<DtoUser> updateUsersEmail(String email) {
+        return  ResponseEntity.ok(userService.updateUsersEmail(email));
     }
 }

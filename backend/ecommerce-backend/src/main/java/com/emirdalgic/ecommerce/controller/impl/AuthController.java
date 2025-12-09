@@ -1,10 +1,7 @@
 package com.emirdalgic.ecommerce.controller.impl;
 
 import com.emirdalgic.ecommerce.controller.IAuthController;
-import com.emirdalgic.ecommerce.dto.DtoLoginIU;
-import com.emirdalgic.ecommerce.dto.DtoToken;
-import com.emirdalgic.ecommerce.dto.DtoUser;
-import com.emirdalgic.ecommerce.dto.DtoUserIU;
+import com.emirdalgic.ecommerce.dto.*;
 import com.emirdalgic.ecommerce.services.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +17,8 @@ public class AuthController implements IAuthController {
 
     @PostMapping("/register")
     @Override
-    public ResponseEntity<DtoToken> register(@RequestBody @Valid DtoUserIU dtoUserIU) {
-        return ResponseEntity.ok(authService.register(dtoUserIU));
+    public ResponseEntity<DtoToken> register(@RequestBody @Valid DtoRegisterUI dtoRegisterUI) {
+        return ResponseEntity.ok(authService.register(dtoRegisterUI));
     }
 
     @PostMapping("/login")

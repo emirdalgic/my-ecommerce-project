@@ -15,16 +15,22 @@ import org.springframework.web.bind.annotation.*;
 public class CartController implements ICartController {
     private final ICartService cartService;
 
-    @PostMapping(path = "/add")
+    @PostMapping(path = "/add-item")
     @Override
     public ResponseEntity<DtoCart> addToCart(@RequestBody DtoAddToCartIU dtoAddToCartIU) {
-        return ResponseEntity.ok(cartService.addToCart(dtoAddToCartIU));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addToCart(dtoAddToCartIU));
     }
 
-    @DeleteMapping(path = "/item/{productId}")
+    @DeleteMapping(path = "/delete-item/{productId}")
     @Override
     public ResponseEntity<Void> deleteCartItem(@PathVariable(name = "productId") Long productId) {
         cartService.deleteCartItem(productId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/my-cart")
+    @Override
+    public ResponseEntity<DtoCart> getUserCart() {
+        return ResponseEntity.ok(cartService.getUserCart());
     }
 }

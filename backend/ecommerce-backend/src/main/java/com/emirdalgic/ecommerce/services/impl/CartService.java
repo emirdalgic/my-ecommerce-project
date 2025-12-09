@@ -63,44 +63,67 @@ public class CartService implements ICartService {
         return dtoCart;
     }
 
+    private void calculateCartTotalPrice(Cart cart){
+        BigDecimal total = BigDecimal.ZERO;
+        for(CartItem item : cart.getCartItems()){
+            BigDecimal price = item.getProduct().getPrice();
+            BigDecimal quantity = BigDecimal.valueOf(item.getQuantity());
+
+            BigDecimal lineTotal = price.multiply(quantity);
+            total = total.add(lineTotal);
+        }
+        cart.setTotalPrice(total);
+    }
+
     @Transactional
     @Override
     public DtoCart addToCart(DtoAddToCartIU dtoAddToCartIU) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(username)
-                .orElseThrow(()-> new BaseException(MessageType.NO_RECORD_EXIST));
+                .orElseThrow(() -> new BaseException(MessageType.NO_RECORD_EXIST));
+
         Cart cart = user.getCart();
-        if(cart == null){
+        if (cart == null) {
             cart = new Cart();
             cart.setUser(user);
             cart.setCartItems(new ArrayList<>());
             cart.setTotalPrice(BigDecimal.ZERO);
-
             cart = cartRepository.save(cart);
         }
 
         Product product = productRepository.findById(dtoAddToCartIU.getProductId())
-                .orElseThrow(()-> new BaseException(MessageType.NO_RECORD_EXIST));
+                .orElseThrow(() -> new BaseException(MessageType.NO_RECORD_EXIST));
+
+        int requestedQty = dtoAddToCartIU.getQuantity();
+        int stock = product.getStockAmount();
+
+        if (requestedQty <= 0)
+            throw new BaseException(MessageType.INVALID_QUANTITY);
+
+        if (requestedQty > stock)
+            throw new BaseException(MessageType.INSUFFICIENT_STOCK);
 
         Optional<CartItem> existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
                 .findFirst();
 
-        if(existingItem.isPresent()){
+        if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
-            item.setQuantity(item.getQuantity() + dtoAddToCartIU.getQuantity());
-        }else{
+            item.setQuantity(item.getQuantity() + requestedQty);
+        } else {
             CartItem newItem = new CartItem();
             newItem.setProduct(product);
             newItem.setCart(cart);
-            newItem.setQuantity(dtoAddToCartIU.getQuantity());
-
+            newItem.setQuantity(requestedQty);
             cart.getCartItems().add(newItem);
         }
 
+        calculateCartTotalPrice(cart);
         Cart savedCart = cartRepository.save(cart);
+
         return mapToDto(savedCart);
     }
+
 
     @Transactional
     @Override
@@ -126,5 +149,24 @@ public class CartService implements ICartService {
         cart.getCartItems().remove(itemToDelete);
         cartItemRepository.deleteById(itemToDelete.getId());
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    @Override
+    public DtoCart getUserCart() {
+        String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(()-> new BaseException(MessageType.NO_RECORD_EXIST));
+        Cart cart = user.getCart();
+
+        if(cart == null){
+            cart = new Cart();
+            cart.setUser(user);
+            user.setCart(cart);
+
+            cart = cartRepository.save(cart);
+        }
+
+        return mapToDto(cart);
     }
 }

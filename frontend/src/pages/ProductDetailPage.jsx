@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../api/productService'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import NotFoundPage from './NotFoundPage'
+import { addToCart } from '../api/cartService'
+import { addItemToCart, fetchCart } from '../redux/features/cartSlice'
 
 const ProductDetailPage = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { productId } = useParams()
-
-  const { isLoggedIn, status } = useSelector(((state) => state.auth)) //auth durumunu cartservisi yazınca dönücem
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
+
+  const handleAddToCart = () => {
+    dispatch(addItemToCart({ product: product, quantity: 1 })).unwrap()
+      .then(() => {
+        dispatch(fetchCart());
+        console.log("added")
+      })
+      .catch((error) => {
+        console.error(error)
+      });
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,10 +49,15 @@ const ProductDetailPage = () => {
     <div className="container mx-auto py-10 px-4">
       <div className="flex flex-col md:flex-row gap-10 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="w-full md:w-1/2 flex justify-center items-center bg-gray-50 rounded-lg p-4">
-          <img
-            alt="Product Name"
-            className="max-h-[500px] w-auto object-contain hover:scale-105 transition duration-500"
-          />
+          {product?.imageUrl ? (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-full object-contain"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No Img</div>
+          )}
         </div>
 
         <div className="w-full md:w-1/2 flex flex-col space-y-6">
@@ -73,14 +91,14 @@ const ProductDetailPage = () => {
             </div>
 
             <button
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition shadow-md flex justify-center items-center gap-2"
-            // onClick={handleAddToCart}
+              className="flex-1 bg-orange-500 cursor-pointer hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition shadow-md flex justify-center items-center gap-2"
+              onClick={handleAddToCart}
             >
               🛒 Add to Card
             </button>
 
             <button
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-md"
+              className="flex-1 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-md"
             // onClick={handleBuyNow}
             >
               Buy now

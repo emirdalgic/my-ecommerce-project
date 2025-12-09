@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SearchBar from "./SearchBar"
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../redux/features/authSlice'
+import { fetchCart } from '../redux/features/cartSlice'
 import { getAllCategories } from '../api/categoryService'
 import { searchProducts } from '../api/productService'
 import SearchOutput from './SearchOutput'
 import { getCurrentUser } from '../api/authService'
+import MiniCart from './MiniCart'
 
 function Navbar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { isLoggedIn } = useSelector(((state) => state.auth))
+  const { cartItems } = useSelector((state) => state.cart)
 
   const [categories, setCategories] = useState([])
   const [query, setQuery] = useState("")
   const [results, setResults] = useState([])
   const [isOutputVisible, setIsOutputVisible] = useState(false)
-
   const [userId, setUserId] = useState(null)
+
+  const [isCartOpen, setIsCartOpen] = useState(false)
+
+  const cartRef = useRef(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -32,6 +38,12 @@ function Navbar() {
     }
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchCart())
+    }
+  }, [dispatch, isLoggedIn])
 
   useEffect(() => {
     const timerId = setTimeout(async () => {
@@ -57,22 +69,29 @@ function Navbar() {
         try {
           const response = await getCurrentUser()
           setUserId(response.id)
-          console.log(userId);
-
-
         } catch (error) {
           console.log(error);
         }
       }
       fetchUser()
     }
-  }, [userId])
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setIsCartOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [cartRef]);
+
 
   const handleLogout = () => {
     dispatch(logout())
     navigate("/")
   }
-
 
   return (
     <header className='bg-white shadow-sm sticky top-0 z-50'>
@@ -93,11 +112,32 @@ function Navbar() {
 
           <nav className='flex items-center gap-6 font-medium text-gray-600'>
 
-            <Link to={`profiles/${userId}`}>My Profile</Link>
+            {isLoggedIn && (
+              <Link to={`profiles/${userId}`} className='hover:text-blue-600 transition'>
+                My Profile
+              </Link>
+            )}
 
-            <Link to={"/cart"} className='hover:text-blue-600 transition flex items-center gap-1'>
-              <span>My Cart</span>
-            </Link>
+            <div className='relative' ref={cartRef}>
+              <button
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                className='hover:text-blue-600 transition flex items-center gap-1 relative p-2'
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+
+                {cartItems && cartItems.length > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform translate-x-1 -translate-y-1">
+                    {cartItems.length}
+                  </span>
+                )}
+              </button>
+
+              {isCartOpen && (
+                <MiniCart onClose={() => setIsCartOpen(false)} />
+              )}
+            </div>
 
             <Link to={"/contact"} className='hover:text-blue-600 transition hidden sm:block'>
               Contact Us
@@ -146,7 +186,6 @@ function Navbar() {
           </div>
         </nav>
       </div>
-
     </header>
   )
 }

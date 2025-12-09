@@ -11,6 +11,8 @@ import ProfilePage from "./pages/ProfilePage"
 import NotFoundPage from "./pages/NotFoundPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import OrdersPage from './pages/OrdersPage'
+import AddressPage from './pages/AddressPage'
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path='/cart' element={<CartPage />} />
         <Route path='/profiles/:profileId' element={<ProfilePage />} />
         <Route path='/checkout' element={<CheckoutPage />} />
+        <Route path='/orders/history' element={<  OrdersPage />}></Route>
+        <Route path='/profile/my-addresses' element={<AddressPage />}></Route>
 
         {/*not found*/}
         <Route path='*' element={<NotFoundPage />} />

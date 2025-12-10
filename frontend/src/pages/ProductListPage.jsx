@@ -10,6 +10,9 @@ function ProductListPage() {
   const { categoryId } = useParams()
 
   const [products, setProducts] = useState([])
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [isLast, setIsLast] = useState(false)
   const [categories, setCategories] = useState([])
   const [pageTitle, setPageTitle] = useState("All Products")
   const [loading, setLoading] = useState(true)
@@ -62,13 +65,16 @@ function ProductListPage() {
           setPageTitle("All Products & Filter")
         }
         const response = await getFilteredProducts(
-          0, 10,
+          currentPage,
+          12,
           filters.query,
           activeCategoryIds,
           filters.minPrice,
           filters.maxPrice
         )
         setProducts(response.content)
+        setTotalPages(response.totalPages)
+        setIsLast(response.last)
       } catch (error) {
         console.error(error)
       } finally {
@@ -77,10 +83,11 @@ function ProductListPage() {
     }
     fetchProductsData()
 
-  }, [categoryId, filters])
+  }, [categoryId, filters, currentPage])
 
 
   const handleSearch = (val) => {
+    setCurrentPage(0)
     setFilters(prev => ({ ...prev, query: val }))
   }
 
@@ -135,6 +142,26 @@ function ProductListPage() {
             </div>
           )}
         </div>
+      </div>
+      <div className="flex justify-center items-center gap-4 mt-8">
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+          disabled={currentPage === 0}
+          className={`px-4 py-2 rounded ${currentPage === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+        >
+          Prev
+        </button>
+
+        <span className="text-gray-700 font-medium">
+          Page {currentPage + 1} / {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage(prev => prev + 1)}
+          disabled={isLast}
+          className={`px-4 py-2 rounded ${isLast ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+        >
+          Next
+        </button>
       </div>
 
     </div>

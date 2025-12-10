@@ -78,7 +78,7 @@ function MiniCart({ onClose }) {
                         </div>
                         <button
                             onClick={(e) => removeItem(e, item.product.id)}
-                            className="text-gray-400 hover:text-red-500 p-1"
+                            className="text-gray-400 hover:text-red-500 p-1 cursor-pointer"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
@@ -93,7 +93,7 @@ function MiniCart({ onClose }) {
                 </div>
                 <button
                     onClick={handleCheckout}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-500/30"
+                    className="w-full bg-blue-600 cursor-pointer text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-500/30"
                 >
                     Proceed to Checkout
                 </button>

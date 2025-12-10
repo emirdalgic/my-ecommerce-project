@@ -13,14 +13,14 @@ const HomePage = () => {
         const response = await getProductsShowcase()
         setCategoryNodes(response)
         console.log(response);
-        
+
       } catch (error) {
         console.log(error)
       } finally {
         setLoading(false)
       }
     }
-    
+
     fetchShowcase()
   }, [])
 
@@ -30,8 +30,8 @@ const HomePage = () => {
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-end mb-8 border-b pb-4">
         <h1 className="text-3xl font-bold text-gray-800">Showcase</h1>
-        <Link 
-          to="/products" 
+        <Link
+          to="/products"
           className="text-blue-600 font-semibold hover:text-blue-800 transition"
         >
           See All Products →
@@ -45,7 +45,7 @@ const HomePage = () => {
                 {node.categoryName}
               </Link>
             </h3>
-            <Link 
+            <Link
               to={`/products/category/${node.categoryId}`}
               className="text-sm font-medium text-blue-500 hover:text-blue-700 hover:underline transition flex items-center gap-1"
             >
@@ -54,12 +54,12 @@ const HomePage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {node.products.map((product) => (
-              <Link 
+              <Link
                 key={product.id}
-                to={`/products/${product.id}`} 
+                to={`/products/${product.id}`}
                 className="group"
               >
-                <ProductCard product={product} /> 
+                <ProductCard product={product} />
               </Link>
             ))}
           </div>

@@ -18,7 +18,9 @@ function OrdersPage() {
       let response
       try {
         const response = await getUserOrders()
-        console.log(response)
+        const sortedOrders = response.content.sort((a, b) =>
+          new Date(b.createdDate) - new Date(a.createdDate)
+        )
         setOrders(response.content)
       } catch (error) {
         console.log(error);
@@ -95,7 +97,7 @@ function OrdersPage() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-gray-800">{item.product?.name || "Product Name"}</h4>
+                    <Link className="font-semibold text-gray-800" to={`/products/${item.product.id}`}>{item.product?.name || "Product Name"}</Link>
                     <p className="text-sm text-gray-500 line-clamp-1">{item.product?.description}</p>
                   </div>
 

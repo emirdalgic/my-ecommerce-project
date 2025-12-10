@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DtoProductIU {
     @NotEmpty(message = "name cannot be empty")
-    @Size(min = 3, max = 30)
+    @Size(min = 3, max = 100)
     private String name;
     @NotNull(message = "price cannot be empty")
     @Positive(message = "price must higher than zero")
@@ -21,7 +21,7 @@ public class DtoProductIU {
     @Min(value = 0,message = "stock cannot be negative")
     private int stockAmount;
     private String imageUrl;
-    @Size(min = 10, max = 100)
+    @Size(min = 10, max = 1000)
     private  String description;
 
     @NotNull(message = "category must be selected")

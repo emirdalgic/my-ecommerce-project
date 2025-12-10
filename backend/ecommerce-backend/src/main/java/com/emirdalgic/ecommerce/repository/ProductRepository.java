@@ -19,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //for searchbar
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
+    List<Product> findByCategoryId(Long id);
+
     @Query("SELECT p FROM Product p WHERE " +
             "(:query IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%'))) AND " +
             "(:categoryIds IS NULL OR p.category.id IN (:categoryIds)) AND " +

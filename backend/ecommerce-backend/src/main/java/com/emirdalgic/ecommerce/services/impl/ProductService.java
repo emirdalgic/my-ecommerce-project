@@ -11,9 +11,11 @@ import com.emirdalgic.ecommerce.repository.CategoryRepository;
 import com.emirdalgic.ecommerce.repository.ProductRepository;
 import com.emirdalgic.ecommerce.repository.UserRepository;
 import com.emirdalgic.ecommerce.services.IProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,6 +56,22 @@ public class ProductService implements IProductService {
         return dtoProduct;
     }
 
+    private void checkAccess(Product product, User vendor){
+        boolean isOwner = product.getVendor().getId().equals(vendor.getId());
+
+        boolean isAdmin = vendor.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+
+        if (!isOwner && !isAdmin) {
+            throw new BaseException(MessageType.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    private User getCurrentUser(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new BaseException(MessageType.NO_RECORD_EXIST));
+    }
 
     @Override
     public Page<DtoProduct> getProductsByCategory(Long categoryId, int page, int size) {
@@ -93,8 +111,11 @@ public class ProductService implements IProductService {
 
     @Override
     public void deleteProductById(Long id) {
+        User vendor = getCurrentUser();
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new BaseException(MessageType.NO_RECORD_EXIST));
+
+        checkAccess(product, vendor);
         productRepository.deleteById(id);
     }
 
@@ -108,8 +129,7 @@ public class ProductService implements IProductService {
 
         product.setCategory(category);
 
-        User vendor = userRepository.findById(1L)
-                .orElseThrow(() -> new BaseException(MessageType.NO_RECORD_EXIST));
+        User vendor = getCurrentUser();
 
         product.setVendor(vendor);
 
@@ -124,10 +144,13 @@ public class ProductService implements IProductService {
             product.setProductImages(productImages);
         }
 
+        checkAccess(product, vendor);
+
         Product dbProduct = productRepository.save(product);
         return mapToDto(dbProduct);
     }
 
+    @Transactional
     @Override
     public DtoProduct updateProductById(Long id, DtoProductIU dtoProductIU) {
         Product product = productRepository.findById(id)
@@ -143,6 +166,10 @@ public class ProductService implements IProductService {
         product.setDescription(dtoProductIU.getDescription());
         product.setPrice(dtoProductIU.getPrice());
         product.setStockAmount(dtoProductIU.getStockAmount());
+
+        User vendor = getCurrentUser();
+
+        checkAccess(product, vendor);
 
         Product updatedProduct = productRepository.save(product);
         return mapToDto(updatedProduct);

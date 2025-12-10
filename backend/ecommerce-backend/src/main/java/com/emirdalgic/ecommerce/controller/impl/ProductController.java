@@ -6,6 +6,7 @@ import com.emirdalgic.ecommerce.dto.DtoProduct;
 import com.emirdalgic.ecommerce.dto.DtoProductIU;
 import com.emirdalgic.ecommerce.entities.Product;
 import com.emirdalgic.ecommerce.services.IProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +54,7 @@ public class ProductController implements IProductController {
 
     @PostMapping(path = "/save")
     @Override
-    public ResponseEntity<DtoProduct> createProduct(@RequestBody DtoProductIU dtoProductIU) {
+    public ResponseEntity<DtoProduct> createProduct(@RequestBody @Valid DtoProductIU dtoProductIU) {
         DtoProduct savedProduct = productService.createProduct(dtoProductIU);
         return  ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
@@ -61,7 +62,7 @@ public class ProductController implements IProductController {
     @PutMapping(path = "/update/{id}")
     @Override
     public ResponseEntity<DtoProduct> updateProductById(@PathVariable(name = "id") Long id,
-                                                        @RequestBody DtoProductIU dtoProductIU) {
+                                                        @RequestBody @Valid DtoProductIU dtoProductIU) {
         DtoProduct updatedProduct = productService.updateProductById(id, dtoProductIU);
         return ResponseEntity.ok(updatedProduct);
     }
